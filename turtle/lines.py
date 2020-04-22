@@ -21,8 +21,10 @@ class lines:
             self.color_cur  = 0
         return self.colors[self.color_cur]
 
-    def lines_ver(self,n): #Вертикальные линии
-        if colors != None:
+    def lines_ver(self): #Вертикальные линии
+        print('Введите количество линий')
+        n = int(input())
+        if self.colors != None:
             for _ in range(n):
                 pendown()
                 color(self.color_change())
@@ -31,18 +33,20 @@ class lines:
                 self.coords(self.x,self.y - 20)
             done()
 
-    def lines_hor(self,n): #Горизонтальные линии
-        if colors != None:
-            right(90)
-            for _ in range(n):
-                pendown()
-                color(self.color_change())
-                forward(500)
-                penup()
-                self.coords(self.x + 20, self.y)
-            done()
+    def lines_hor(self): #Горизонтальные линии
+        print('Введите количество линий')
+        n = int(input())
+        right(90)
+        for _ in range(n):
+            pendown()
+            forward(500)
+            penup()
+            self.coords(self.x + 20, self.y)
+        done()
 
-    def spiral(self,n): #Спираль
+    def spiral(self): #Спираль
+        print('Введите количество витков')
+        n = int(input())
         tmp = 10
         pendown()
         for _ in range(n):

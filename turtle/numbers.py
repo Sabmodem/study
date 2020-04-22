@@ -5,7 +5,9 @@ class numbers:
     y = None
     angle = None #Угол отколения от начального направления
 
-    def __init__(self,x,y,number):
+    def __init__(self,x,y):
+        print('Введите число: ')
+        number = int(input())
         penup()
         self.angle = 0
         pensize(10)
@@ -191,7 +193,7 @@ class numbers:
         self.angle -= 135
         self.coords(self.x + 150,self.y)
 
-    def check_msg(self,number): #Обработка сообщений
+    def check_msg(self,number): #Обработка числа
         if number == '0':
             self.zero()
         elif number == '1':
@@ -215,7 +217,7 @@ class numbers:
         else:
             print('Некорректный ввод')
 
-    def drow(self,number): #Цикл обработки сообщений
+    def drow(self,number): #Цикл обработки числа
         for i in number:
             self.check_msg(i)
         done()
