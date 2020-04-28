@@ -15,10 +15,8 @@ class lines:
         self.coords(x,y)
 
     def color_change(self): #Смена текущего цвета линии
-        if self.color_cur < ((len(self.colors))-1):
-            self.color_cur += 1
-        else:
-            self.color_cur  = 0
+        self.color_cur += 1
+        self.color_cur = self.color_cur % (len(self.colors))
         return self.colors[self.color_cur]
 
     def lines_ver(self): #Вертикальные линии
