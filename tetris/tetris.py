@@ -76,7 +76,7 @@ class tetris:
                 pygame.draw.rect(self.win, color_bg, (self.pos_x * r, self.pos_y * r, r, r), 3)
                 self.pos_y += 1
             else:
-                # Если текущая координата это дно или заполненный блок, добавляем его с список залитых
+                # Если текущая координата это дно или блок, подлежащий заполнению, добавляем его в список залитых
                 pygame.draw.rect(self.win, colors[self.index_color], (self.pos_x * r, self.pos_y * r, r, r))  # заливка квадрата
                 self.filled.append((self.pos_y,self.pos_x))
                 #Если стакан полный, заканчиваем игру
@@ -108,4 +108,3 @@ class tetris:
             self.update()
             if self.active == False:
                 break
-tetris()
