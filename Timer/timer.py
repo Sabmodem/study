@@ -1,22 +1,23 @@
 from tkinter import *
+import time
 
 class timer:
     win = None
-    timeInt = None
     results = []
     mode = None
     labels = []
     Buttons = []
+    start = time.time()
+    cont = False                # Индикатор ручной остановки таймера
+    stop = 0                    # Время остановки. Используется для возобновления счета
 
     def __init__(self):
         self.win = Tk()
         self.win.title('Секундомер')
         self.win.geometry('900x600') # Создаем окно
 
-        self.timeInt = [0,0,0,0] # Тут будем хранить счетчик времени
-
         self.labels.append(Label(self.win, text="Секундомер"))  # строка названия
-        self.labels.append(Label(self.win,text = '0:0:0:0'))       # сюда будем выводить время
+        self.labels.append(Label(self.win,text = ''))       # сюда будем выводить время
         self.labels.append(Label(self.win,text = ''))       # Замеры
 
         self.labels.append(Label(self.win,text = 'Space'))
@@ -65,9 +66,12 @@ class timer:
         self.labels[2].config(text = '\n'.join(self.results))
 
     def timerStr(self):         # Получаем строку с временем
-        return  str(str(self.timeInt[0]) + ':' + str(self.timeInt[1]) + ':' + str(self.timeInt[2]) + ':' + str(self.timeInt[3]))
+        seconds = int(time.time() - self.start)
+        return  str(str(seconds//3600) + ':' + str((seconds//60)%60) + ':' + str(seconds%60) + ':' + str(int((time.time() - self.start)*1000))[-3::])
 
     def manualStop(self):       # Остновка таймера кнопкой
+        self.cont = True
+        self.stop = time.time()
         self.TimerStop()
         self.fixResults()
         self.Buttons[0].config(text = 'Старт', command = self.timerStart)
@@ -77,37 +81,35 @@ class timer:
         self.win.after_cancel(self.mode)
 
     def timerStart(self):       # Запуск таймера
+        if self.cont == False:
+            self.start = time.time()
+        else:
+            self.start += time.time() - self.stop
         self.Buttons[0].config(text = 'Стоп', command = self.manualStop)
         self.win.bind('<space>',(lambda event: self.manualStop()))
+        self.cycle()
 
-        self.timeInt[3] += 1    # Считаем время
-        if self.timeInt[3] == 1000:
-            self.timeInt[3] = 0
-            self.timeInt[2] += 1
-        if self.timeInt[2] == 60:
-            self.timeInt[2] = 0
-            self.timeInt[1] += 1
-        if self.timeInt[1] == 60:
-            self.timeInt[1] = 0
-            self.timeInt[0] += 1
-
+    def cycle(self):
         self.updateTimer()
-        self.mode = self.win.after(1,self.timerStart)
+        self.mode = self.win.after(1,self.cycle)
 
     def timerCurrent(self):     # Фиксируем замеры
         self.fixResults()
 
     def timerClear(self):       # Очистка таймера
         self.TimerStop()
-        self.timeInt = [0,0,0,0]
+        self.start = time.time()
+        self.updateTimer()
         self.results = []
         self.fixResults()
+        self.start = 0
         self.Buttons[0].config(text = 'Старт', command = self.timerStart)
         self.win.bind('<space>',(lambda event: self.timerStart()))
 
     def timerNull(self):        # Обнуление таймера
         self.TimerStop()
-        self.timeInt = [0,0,0,0]
+        self.start = time.time()
         self.updateTimer()
+        self.start = 0
         self.Buttons[0].config(text = 'Старт', command = self.timerStart)
         self.win.bind('<space>',(lambda event: self.timerStart()))
