@@ -7,7 +7,7 @@ class timer:
     mode = None                 # Сюда пишем дескриптор запланированного запуска счетчика
     labels = []                 # Сюда добавляем текстовые поля
     Buttons = []                # Сюда добавляем кнопки
-    start = time.time()         # Время начала работы
+    start = 0                   # Время начала работы
     cont = False                # Если требуется продолжить с места остановки
     stop = 0                    # Время остановки. Используется для возобновления счета
     run = False                 # Индикатор работы секундомера
@@ -60,13 +60,17 @@ class timer:
         '''
         Метод обновления строки с временем и поля для замеров.
         В окно влезает только 26 результатов. Этого должно хватить на все случаи жизни,
-        Так что поле прокрутки не предусмотрено. Самый старый результат срезается
+        Так что поле прокрутки не предусмотрено. Самый старый результат срезается.
+        Если время старта == 0, то обнуляем поле
         '''
-        self.labels[1].config(text = self.timerStr())
-        if len(self.results) > 26:
-            self.labels[2].config(text = '\n'.join(self.results[len(self.results)-26::]))
-        else:
-            self.labels[2].config(text = '\n'.join(self.results))
+        if self.start != 0:
+            self.labels[1].config(text = self.timerStr())
+            if len(self.results) > 26:
+                self.labels[2].config(text = '\n'.join(self.results[len(self.results)-26::]))
+            else:
+                self.labels[2].config(text = '\n'.join(self.results))
+        elif self.start == 0:
+            self.labels[1].config(text = '0:0:0:0')
 
     def fixResults(self):
         '''
@@ -93,20 +97,20 @@ class timer:
         Ручная остановка таймера. Запоминаем время остановки, потом используем его
         Чтобы не потерять текущее значение счетчика. Прицнип аналогичен методу выше
         '''
-        if self.run == True:
-            self.cont = True
-            self.stop = time.time()
-            self.TimerStop()
-            self.fixResults()
-            self.run = False
+        self.cont = True
+        self.TimerStop()
+        self.fixResults()
+        self.stop = time.time()
 
     def TimerStop(self):
         '''
         Метод остановки таймера. Останавливает счетчик и обновляет надпись на кнопке стопа
         '''
-        self.win.after_cancel(self.mode)
-        self.Buttons[0].config(text = 'Старт', command = self.timerStart)
-        self.win.bind('<space>',(lambda event: self.timerStart()))
+        if self.run == True:
+            self.run = False
+            self.win.after_cancel(self.mode)
+            self.Buttons[0].config(text = 'Старт', command = self.timerStart)
+            self.win.bind('<space>',(lambda event: self.timerStart()))
 
     def timerStart(self):
         '''
@@ -136,18 +140,18 @@ class timer:
         '''
         Метод очистки таймера. Останавливает счетчик и обнуляет все значения.
         '''
-        self.run = False
+        self.cont = False
         self.TimerStop()
-        self.start = time.time()
         self.results = []
-        self.fixResults()
+        self.start = 0
         self.updateTimer()
+        self.labels[2].config(text = '')
 
     def timerNull(self):
         '''
         Метод обнуления таймера. Обнуляет только счетчик времени, останавливает таймер
         '''
-        self.run = False
+        self.cont = False
         self.TimerStop()
-        self.start = time.time()
+        self.start = 0
         self.updateTimer()
