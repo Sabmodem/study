@@ -35,15 +35,11 @@ class tetris:
         self.fall_time += self.clock.get_rawtime()
         self.press_time += self.clock.get_rawtime()
 
-    def check_events(self):     # Проверка сигнала к выходу
+    def check_events(self):     # Проверка сигналов к выходу и паузе
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 pygame.quit()
-
-    def check_pause(self):      # Проверка сигнала к паузе
-        if self.key[pygame.K_SPACE]:
-            if self.press_time >= int_pressed:
-                self.press_time = 0
+            if e.type == pygame.KEYUP and e.key == pygame.K_SPACE:
                 self.pause = not self.pause
 
     def check_presses(self):    # Проверка нажатия клавиш
@@ -101,7 +97,7 @@ class tetris:
             self.get_keys()
             self.clock_update()
             self.check_events()
-            self.check_pause()
+            # self.check_pause()
             if self.pause == False:
                 self.check_presses()
                 self.traffic()
