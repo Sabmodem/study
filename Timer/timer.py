@@ -27,7 +27,6 @@ class timer:
         self.labels.append(Label(self.win,text = 'Esc'))
         self.labels.append(Label(self.win,text = 'BackSpace')) # Подписи для кнопок
 
-
         self.labels[0].place(x = 400,y = 10)
         self.labels[1].place(x = 410,y = 120)
         self.labels[2].place(x = 410,y = 150)
