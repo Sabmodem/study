@@ -15,6 +15,43 @@ const f_split = (line, char) => {
   return result;
 };
 
+const f_map = (obj, func) => {
+  const result = [];
+  for(let i of obj) {
+    result.push(func(i));
+  };
+};
+
+const f_filter = (obj, func) => {
+  const result = [];
+  for(let i of obj) {
+    if(func(i)) {
+      result.push(func(i));
+    };
+  };
+};
+
+function f_reduce(arr, callback, result) {
+  /* arr - перебираемый массив
+     callback - переданная функция,
+     result - "аккумулятор"
+
+     Проверяем, существует ли результат.
+     Если нет, им становится первый элемент массива
+     Применяем переданную функцию к каждому элементу массива
+     возвращаем результат
+  */
+  let i = 0;
+  if (arguments.length < 3) {
+    i = 1;
+    result = arr[0];
+  }
+  for (; i < arr.length; i++) {
+    result = callback(result, arr[i], i, arr);
+  }
+  return result;
+}
+
 const f_sum = (obj) => {
   let sum = 0; // Переменная для суммы
   for(const i of obj) { // Просто суммируем значения в цикле
