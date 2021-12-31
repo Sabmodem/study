@@ -1,0 +1,30 @@
+<!DOCTYPE>
+<html></html>
+<head></head>
+<meta>
+<title></title>
+<body>
+  <div id="workspace"></div>
+</body>
+<script>
+  function ask(node) {
+    if(!node.question) {
+      print_end(node);
+      return;
+    };
+    console.log(node.question);
+    for(let i in node.answers) {
+      console.log([Number(i)],'\t',node.answers[i]);
+    };
+    const answer = readln.questionInt("Your choice? ");
+    ask(findNodeById(node.next_nodes[answer])[0]);
+  };
+
+  fetch('/root')  // Берем данные с сервера
+  .then((res) => {
+  return res.json();
+  })
+  .then((node) => {
+    console.log(node);
+  });
+</script>
