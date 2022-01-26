@@ -26,9 +26,10 @@ const f_filter = (obj, func) => {
   const result = [];
   for(let i of obj) {
     if(func(i)) {
-      result.push(func(i));
+      result.push(i);
     };
   };
+  return result;
 };
 
 function f_reduce(arr, callback, result) {

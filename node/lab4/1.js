@@ -1,4 +1,3 @@
-const fs = require('fs');
 const _ = require('lodash');
 
 console.log(
@@ -7,4 +6,4 @@ console.log(
     .sortBy((obj) => _.keys(obj)[0])
     .map((obj) => _.keys(obj)[0])
     .value()
-)
+);
